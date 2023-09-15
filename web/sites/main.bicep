@@ -4,21 +4,27 @@ param appServiceName string
 param location string
 @description('Resource ID of the App Service Plan')
 param appServicePlanID string
-@description('Instrumentation Key for App Insights')
-param appInsightsInstrumentationKey string
-@description('What language was used to deploy this resource')
-param language string
+@description('User Asisgned Identity for App Service')
+param principalId string = ''
+@description('App Settings for the Application')
+param appSettings object = {}
 
 
 resource appService 'Microsoft.Web/sites@2022-09-01' = {
   name: toLower('app-${appServiceName}')
   location: location
-  identity: {
+  identity: empty(principalId) ? {
     type: 'SystemAssigned'
+
+  }:{
+    type: 'SystemAssigned, UserAssigned'
+    userAssignedIdentities: {
+      '${principalId}': {}
+    
+  }
   }
   tags: {
     displayName: 'Website'
-    Language: language
   }
   properties: {
     serverFarmId: appServicePlanID
@@ -29,10 +35,12 @@ resource appService 'Microsoft.Web/sites@2022-09-01' = {
   }
 }
 
-resource appServiceLogging 'Microsoft.Web/sites/config@2022-03-01' = {
+resource appServiceLogging 'Microsoft.Web/sites/config@2022-09-01' = {
   parent: appService
   name: 'appsettings'
-  properties: {
-    APPINSIGHTS_INSTRUMENTATIONKEY: appInsightsInstrumentationKey
-  }
+  properties: union(list(resourceId('Microsoft.Web/sites/config', appService.name, 'appsettings'), '2022-09-01').properties, appSettings)
 }
+
+
+output appServiceManagedIdentity string = appService.identity.principalId
+output appServiceName string = appService.name
