@@ -33,11 +33,13 @@ resource sqlRoleDefinition 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinit
   }
 }
 */
+
 resource sqlRoleAssignment 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2023-04-15' = {
-  name: '${databaseAccount.name}/${roleAssignmentId}'
+  name: roleAssignmentId
+  parent: databaseAccount
   properties:{
     principalId: principalId
-    roleDefinitionId: '/providers/Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions/${roleDefinitionId}'
+    roleDefinitionId: '/${subscription().id}/resourceGroups/${databaseAccountResourceGroup}/providers/Microsoft.DocumentDB/databaseAccounts/${databaseAccount.name}/sqlRoleDefinitions/${roleDefinitionId}'
     scope: databaseAccount.id
   }
 }

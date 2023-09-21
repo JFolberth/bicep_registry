@@ -31,6 +31,9 @@ resource appService 'Microsoft.Web/sites@2022-09-01' = {
     httpsOnly: true
     siteConfig: {
       minTlsVersion: '1.2'
+      appSettings:[
+        appSettings
+      ]
     }
   }
 }
@@ -38,7 +41,7 @@ resource appService 'Microsoft.Web/sites@2022-09-01' = {
 resource appServiceLogging 'Microsoft.Web/sites/config@2022-09-01' = {
   parent: appService
   name: 'appsettings'
-  properties: union(list(resourceId('Microsoft.Web/sites/config', appService.name, 'appsettings'), '2022-09-01').properties, appSettings)
+  properties: appSettings
 }
 
 
