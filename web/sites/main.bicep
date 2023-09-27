@@ -7,7 +7,7 @@ param appServicePlanID string
 @description('User Asisgned Identity for App Service')
 param principalId string = ''
 @description('App Settings for the Application')
-param appSettings object = {}
+param appSettingsArray array = []
 
 
 resource appService 'Microsoft.Web/sites@2022-09-01' = {
@@ -31,19 +31,11 @@ resource appService 'Microsoft.Web/sites@2022-09-01' = {
     httpsOnly: true
     siteConfig: {
       minTlsVersion: '1.2'
-      appSettings:[
-        appSettings
-      ]
+      appSettings: appSettingsArray
+      
     }
   }
 }
-
-resource appServiceLogging 'Microsoft.Web/sites/config@2022-09-01' = {
-  parent: appService
-  name: 'appsettings'
-  properties: appSettings
-}
-
 
 output appServiceManagedIdentity string = appService.identity.principalId
 output appServiceName string = appService.name
