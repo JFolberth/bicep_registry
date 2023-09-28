@@ -1,4 +1,5 @@
 @description('Name for the Log Analytics Workspace')
+@minLength(3)
 param logAnalyticsName string
 @description('Location for resource.')
 param location string
