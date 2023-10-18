@@ -1,4 +1,3 @@
-
 @description('The name for the container')
 param containerName string = 'myContainer'
 @minValue(400)
@@ -8,7 +7,7 @@ param throughput int = 400
 @description('The name for the database to create the container in')
 param parentDatabaseName string
 
-resource parentDatabase 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2023-03-01-preview' existing  = {
+resource parentDatabase 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2023-03-01-preview' existing = {
   name: parentDatabaseName
 }
 resource container 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2023-03-01-preview' = {

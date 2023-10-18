@@ -17,4 +17,3 @@ resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2023-03-01
 }
 
 output cosmosDatabaseName string = database.name
-

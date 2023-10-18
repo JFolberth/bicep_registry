@@ -4,7 +4,6 @@ param accountName string
 @description('Location for the Azure Cosmos DB account.')
 param location string = resourceGroup().location
 
-
 @description('The secondary region for the Azure Cosmos DB account.')
 param secondaryRegion string
 
@@ -34,8 +33,6 @@ param maxIntervalInSeconds int = 300
 ])
 @description('Enable system managed failover for regions')
 param systemManagedFailover bool = true
-
-
 
 var consistencyPolicy = {
   Eventual: {
@@ -82,4 +79,3 @@ resource account 'Microsoft.DocumentDB/databaseAccounts@2023-03-01-preview' = {
 }
 
 output cosomosAccountName string = account.name
-

@@ -9,19 +9,18 @@ param principalId string = ''
 @description('App Settings for the Application')
 param appSettingsArray array = []
 
-
 resource appService 'Microsoft.Web/sites@2022-09-01' = {
   name: toLower('app-${appServiceName}')
   location: location
   identity: empty(principalId) ? {
     type: 'SystemAssigned'
 
-  }:{
+  } : {
     type: 'SystemAssigned, UserAssigned'
     userAssignedIdentities: {
       '${principalId}': {}
-    
-  }
+
+    }
   }
   tags: {
     displayName: 'Website'
@@ -32,7 +31,7 @@ resource appService 'Microsoft.Web/sites@2022-09-01' = {
     siteConfig: {
       minTlsVersion: '1.2'
       appSettings: appSettingsArray
-      
+
     }
   }
 }
